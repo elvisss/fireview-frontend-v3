@@ -9,7 +9,6 @@ import { ref, computed } from '@vue/composition-api'
 import { useRouter } from '@/utils'
 import LayoutBlank from '@/layouts/Blank.vue'
 import LayoutContent from '@/layouts/Content.vue'
-import websocketService from '@/services/websocketService'
 
 export default {
   components: {
@@ -19,15 +18,6 @@ export default {
   setup() {
     const { route } = useRouter()
     const name = ref('')
-    const wsService = websocketService.instance
-
-    wsService.listen('name', serverName => {
-      name.value = serverName
-    })
-
-    wsService.listen('test', db => {
-      console.log(db)
-    })
 
     const resolveLayout = computed(() => {
       // Handles initial route

@@ -42,15 +42,35 @@
         <slot></slot>
       </div>
     </v-main>
+    <v-footer
+      app
+      inset
+      color="transparent"
+      absolute
+      height="80"
+      class="px-0"
+    >
+      <div class="boxed-container w-full">
+        <div class="d-flex justify-end">
+          <v-alert
+            style="margin: 0"
+            :type="status"
+          >
+            Server Status
+          </v-alert>
+        </div>
+      </div>
+    </v-footer>
   </v-app>
 </template>
 
 <script>
-import { ref } from '@vue/composition-api'
+import { ref, computed } from '@vue/composition-api'
 import { mdiMagnify, mdiBellOutline, mdiGithub } from '@mdi/js'
 import VerticalNavMenu from './components/vertical-nav-menu/VerticalNavMenu.vue'
 import ThemeSwitcher from './components/ThemeSwitcher.vue'
 import AppBarUserMenu from './components/AppBarUserMenu.vue'
+import websocketService from '@/services/websocketService'
 
 export default {
   components: {
@@ -60,9 +80,18 @@ export default {
   },
   setup() {
     const isDrawerOpen = ref(null)
+    const wsService = ref(websocketService.instance)
+    const status = computed(() => {
+      if (wsService.value.socketStatus) {
+        return 'success'
+      }
+
+      return 'error'
+    })
 
     return {
       isDrawerOpen,
+      status,
 
       // Icons
       icons: {
